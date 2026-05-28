@@ -1,0 +1,12 @@
+.idea/
+*.iml
+target/
+out/
+*.doc
+*.docx
+*.pdf
+*.xlsx
+*.png
+*.json
+progress_*
+workout_progress.*
