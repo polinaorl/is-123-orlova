@@ -17,7 +17,7 @@ public class RegistrationView extends JFrame {
 
     private void initUI() {
         setTitle("Регистрация нового пользователя");
-        setSize(480, 640); // 🔥 Чуть больше высоты, чтобы кнопки точно влезли
+        setSize(480, 640);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
