@@ -12,7 +12,7 @@ public class UserProgressDAO {
         this.conn = conn;
     }
 
-    // 🔥 Метод для записи веса
+    // Метод для записи веса
     public void saveWeight(int userId, double weight, String note) throws SQLException {
         String sql = "INSERT INTO progress_logs (user_id, weight, notes) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
