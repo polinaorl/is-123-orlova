@@ -1,5 +1,6 @@
 package com.workout.app.database;
 
+import com.workout.app.config.DatabaseConfig;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,7 +19,8 @@ public class DatabaseInitializer {
             String sqlScript = readSqlFile("sql/init_db.sql");
 
             System.out.println("Подключение к базе данных...");
-            System.out.println("   URL: jdbc:firebirdsql:localhost/3050:D:\\workout.fdb");
+
+            System.out.println("   URL: " + DatabaseConfig.getDbUrl());
             System.out.println("Подключение успешно!");
 
             // Разбиваем на отдельные команды
@@ -46,10 +48,10 @@ public class DatabaseInitializer {
 
                     System.out.println("   [" + cmdNum + "] Выполняю: " + preview);
                     stmt.execute(trimmed);
-                    System.out.println("OK");
+                    System.out.println("       OK");
                     structureCommands++;
                 } catch (SQLException e) {
-                    System.out.println("Пропущено: " + e.getMessage());
+                    System.out.println("        Пропущено: " + e.getMessage());
                 }
                 cmdNum++;
             }
@@ -67,16 +69,16 @@ public class DatabaseInitializer {
                 String trimmed = command.trim();
                 if (trimmed.isEmpty()) continue;
 
-                // Выполняем только INSERT
+
                 if (!trimmed.toUpperCase().startsWith("INSERT")) continue;
 
                 try (Statement stmt = conn.createStatement()) {
                     System.out.println("   [" + cmdNum + "] Выполняю INSERT...");
                     stmt.execute(trimmed);
-                    System.out.println("OK");
+                    System.out.println("     OK");
                     dataCommands++;
                 } catch (SQLException e) {
-                    System.out.println("Пропущен: " + e.getMessage());
+                    System.out.println("    Пропущен: " + e.getMessage());
                 }
                 cmdNum++;
             }
@@ -85,19 +87,17 @@ public class DatabaseInitializer {
             conn.commit();
             System.out.println("Данные добавлены (команд: " + dataCommands + ")\n");
 
-            System.out.println("База данных успешно инициализирована!");
+            System.out.println(" База данных успешно инициализирована!");
 
         } catch (Exception e) {
-            System.err.println("Ошибка инициализации: " + e.getMessage());
+            System.err.println(" Ошибка инициализации: " + e.getMessage());
             e.printStackTrace();
             throw new SQLException("Failed to initialize database", e);
         }
     }
 
-
-
     private static String readSqlFile(String fileName) throws Exception {
-        System.out.println("Чтение SQL скрипта...");
+        System.out.println("📖 Чтение SQL скрипта...");
 
         try (Scanner scanner = new Scanner(
                 DatabaseInitializer.class.getClassLoader().getResourceAsStream(fileName), "UTF-8")) {
@@ -108,16 +108,12 @@ public class DatabaseInitializer {
         }
     }
 
-    // Разбивает SQL скрипт на отдельные команды
-
     private static String[] splitSqlCommands(String sqlScript) {
         sqlScript = sqlScript.replaceAll("--[^\n]*", "");
         sqlScript = sqlScript.replaceAll("/\\*.*?\\*/", "");
 
-        // Разбиваем по ;
         String[] commands = sqlScript.split(";");
 
-        // Фильтруем пустые команды
         java.util.List<String> result = new java.util.ArrayList<>();
         for (String cmd : commands) {
             String trimmed = cmd.trim();

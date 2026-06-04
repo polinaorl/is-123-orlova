@@ -17,7 +17,7 @@ public class RegistrationView extends JFrame {
 
     private void initUI() {
         setTitle("Регистрация нового пользователя");
-        setSize(480, 600);
+        setSize(480, 640); // 🔥 Чуть больше высоты, чтобы кнопки точно влезли
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -25,83 +25,79 @@ public class RegistrationView extends JFrame {
     }
 
     private void initComponents() {
-        // Главный контейнер с BorderLayout
-        JPanel main = new JPanel(new BorderLayout(0, 20));
-        main.setBackground(new Color(245, 248, 250));
-        main.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        JPanel mainPanel = new JPanel(new BorderLayout(0, 10));
+        mainPanel.setBackground(new Color(245, 248, 250));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
 
-        //  (поля ввода)
-        JPanel centerPanel = new JPanel(new GridBagLayout());
-        centerPanel.setBackground(new Color(245, 248, 250));
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(new Color(245, 248, 250));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 10, 8, 10);
+        gbc.insets = new Insets(5, 8, 5, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 1;
+
+        int row = 0;
 
         // Заголовок
         JLabel title = new JLabel("Регистрация", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 22));
         title.setForeground(new Color(44, 62, 80));
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        centerPanel.add(title, gbc);
+        gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 2;
+        formPanel.add(title, gbc);
+        gbc.gridwidth = 1;
+        row++;
 
         // Поля ввода
-        gbc.gridwidth = 1;
-        int row = 1;
-
-        JTextField emailField = addField(centerPanel, gbc, row++, "Email:");
-        JPasswordField passField = addPassField(centerPanel, gbc, row++, "Пароль:");
-        JTextField heightField = addField(centerPanel, gbc, row++, "Рост (см):");
-        JTextField weightField = addField(centerPanel, gbc, row++, "Вес (кг):");
-        JTextField ageField = addField(centerPanel, gbc, row++, "Возраст:");
+        JTextField emailField = addField(formPanel, gbc, row++, "Email:");
+        JPasswordField passField = addPassField(formPanel, gbc, row++, "Пароль:");
+        JTextField heightField = addField(formPanel, gbc, row++, "Рост (см):");
+        JTextField weightField = addField(formPanel, gbc, row++, "Вес (кг):");
+        JTextField ageField = addField(formPanel, gbc, row++, "Возраст:");
 
         // Выпадающие списки
         JComboBox<String> genderCombo = new JComboBox<>(new String[]{"Мужской", "Женский"});
         styleComboBox(genderCombo);
-        addComponent(centerPanel, gbc, row++, "Пол:", genderCombo);
+        addComponent(formPanel, gbc, row++, "Пол:", genderCombo);
 
         JComboBox<String> goalCombo = new JComboBox<>(new String[]{
                 "Набор мышечной массы", "Похудение", "Поддержание формы"
         });
         styleComboBox(goalCombo);
-        addComponent(centerPanel, gbc, row++, "Цель:", goalCombo);
+        addComponent(formPanel, gbc, row++, "Цель:", goalCombo);
 
         JComboBox<String> locCombo = new JComboBox<>(new String[]{
                 "Спортивный зал", "Домашние условия", "Смешанные тренировки"
         });
         styleComboBox(locCombo);
-        addComponent(centerPanel, gbc, row++, "Место:", locCombo);
+        addComponent(formPanel, gbc, row++, "Место:", locCombo);
 
-        // Добавляем центральную панель
-        main.add(centerPanel, BorderLayout.CENTER);
+        mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        //  НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        bottomPanel.setBackground(new Color(245, 248, 250));
+        // ПАНЕЛЬ КНОПОК
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        btnPanel.setBackground(new Color(245, 248, 250));
 
-        //  Зарегистрироваться
         JButton regBtn = new JButton("Зарегистрироваться");
-        regBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        regBtn.setFont(new Font("Segoe UI", Font.BOLD, 13));
         regBtn.setBackground(new Color(46, 204, 113));
         regBtn.setForeground(Color.WHITE);
         regBtn.setFocusPainted(false);
-        regBtn.setPreferredSize(new Dimension(200, 40));
+        regBtn.setPreferredSize(new Dimension(170, 36));
         regBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        //  Назад
         JButton backBtn = new JButton("Назад ко входу");
-        backBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        backBtn.setFont(new Font("Segoe UI", Font.BOLD, 13));
         backBtn.setBackground(new Color(149, 165, 166));
         backBtn.setForeground(Color.WHITE);
         backBtn.setFocusPainted(false);
-        backBtn.setPreferredSize(new Dimension(180, 40));
+        backBtn.setPreferredSize(new Dimension(150, 36));
         backBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        // Добавляем ОБЕ кнопки
-        bottomPanel.add(regBtn);
-        bottomPanel.add(backBtn);
+        btnPanel.add(regBtn);
+        btnPanel.add(backBtn);
 
-        main.add(bottomPanel, BorderLayout.SOUTH);
+        mainPanel.add(btnPanel, BorderLayout.SOUTH);
 
         // Обработчики
         regBtn.addActionListener(e -> register(
@@ -117,9 +113,12 @@ public class RegistrationView extends JFrame {
             new LoginView().setVisible(true);
         });
 
-        add(main);
+        add(mainPanel);
+        pack();
+        setLocationRelativeTo(null);
     }
 
+    // Вспомогательные методы (без изменений)
     private JTextField addField(JPanel panel, GridBagConstraints gbc, int row, String label) {
         gbc.gridx = 0; gbc.gridy = row;
         panel.add(createLabel(label), gbc);
